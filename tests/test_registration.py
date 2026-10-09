@@ -1,6 +1,6 @@
 import uuid
-import random
 
+from data.user_data import create_user
 from models.user import User
 from pages.registration_page import RegistrationPage
 
@@ -10,12 +10,7 @@ def test_registration_success(driver):
     #random_suffix = random.randint(1, 1_000_000)
     random_suffix = uuid.uuid4().hex[:8]
 
-    user = User(
-        name = "Tonny",
-        last_name = "Molly",
-        email = f"tony{random_suffix}@gmail.com",
-        password = "Password123$"
-    )
+    user = create_user()
     print(random_suffix)
 
     registration_page.open_registration_form()
@@ -24,18 +19,12 @@ def test_registration_success(driver):
     registration_page.submit_registration()
 
     assert registration_page.confirmation_text() =="Registered"
-    assert registration_page.confirmation_text_1() == "You are logged in success"
+    assert registration_page.confirmation_message() == "You are logged in success"
     registration_page.close_window()
 
 def test_registration_with_empty_name(driver):
     registration_page = RegistrationPage(driver)
-
-    user = User(
-        name="",
-        last_name="Molly",
-        email="tony@gmail.com",
-        password="Password123$"
-        )
+    user = create_user(name = "")
 
     registration_page.open_registration_form()
     registration_page.fill_registration_form(user)
@@ -47,13 +36,7 @@ def test_registration_with_empty_name(driver):
 
 def test_registration_with_empty_last_name(driver):
     registration_page = RegistrationPage(driver)
-
-    user = User(
-        name="Tony",
-        last_name="",
-        email="tony@gmail.com",
-        password="Password123$"
-        )
+    user = create_user(last_name="")
 
     registration_page.open_registration_form()
     registration_page.fill_registration_form(user)
@@ -65,13 +48,7 @@ def test_registration_with_empty_last_name(driver):
 
 def test_registration_with_empty_email(driver):
     registration_page = RegistrationPage(driver)
-
-    user = User(
-        name="Tony",
-        last_name="Molly",
-        email="",
-        password="Password123$"
-        )
+    user = create_user(email="")
 
     registration_page.open_registration_form()
     registration_page.fill_registration_form(user)
@@ -83,13 +60,8 @@ def test_registration_with_empty_email(driver):
 
 def test_registration_with_wrong_email(driver):
     registration_page = RegistrationPage(driver)
+    user = create_user(email="tony_mollygmail.com")
 
-    user = User(
-        name="Tony",
-        last_name="Molly",
-        email="tonygmail.com",
-        password="Password123$"
-        )
 
     registration_page.open_registration_form()
     registration_page.fill_registration_form(user)
@@ -101,13 +73,7 @@ def test_registration_with_wrong_email(driver):
 
 def test_registration_with_empty_password(driver):
     registration_page = RegistrationPage(driver)
-
-    user = User(
-        name="Tony",
-        last_name="Molly",
-        email="tony@gmail.com",
-        password=""
-        )
+    user = create_user(password="")
 
     registration_page.open_registration_form()
     registration_page.fill_registration_form(user)
@@ -119,13 +85,7 @@ def test_registration_with_empty_password(driver):
 
 def test_registration_with_wrong_password(driver):
     registration_page = RegistrationPage(driver)
-
-    user = User(
-        name="Tony",
-        last_name="Molly",
-        email="tony@gmail.com",
-        password="Ps12$"
-        )
+    user = create_user(password="P123$")
 
     registration_page.open_registration_form()
     registration_page.fill_registration_form(user)
@@ -137,13 +97,8 @@ def test_registration_with_wrong_password(driver):
 
 def test_registration_without_check_box(driver):
     registration_page = RegistrationPage(driver)
+    user = create_user()
 
-    user = User(
-        name="Tony",
-        last_name="Molly",
-        email="tony@gmail.com",
-        password="Password123$"
-        )
 
     registration_page.open_registration_form()
     registration_page.fill_registration_form(user)
